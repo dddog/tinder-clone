@@ -9,17 +9,19 @@ const TinderCards = (props) => {
   const [people, setPeople] = useState([]);
 
   useEffect(() => {
-    database
+    const unsubscribe = database
       .collection("people")
       .onSnapshot((snapshot) =>
         setPeople(snapshot.docs.map((doc) => doc.data()))
       );
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   return (
     <div>
-      <h1>Tindercards</h1>
-
       <div className="tinderCards__cardContainer">
         {people.map((person) => (
           <TinderCard
